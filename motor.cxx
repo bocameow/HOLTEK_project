@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int m[]={0, 1, 2, 3};
+int m[]={22, 23, 24, 25};
 int a=0;
 
 int main()
