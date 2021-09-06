@@ -8,9 +8,9 @@ using namespace std;
 //=======Pin================
 int redPin1 = 0;
 int redPin2 = 1;
-int trigger = 3, echo = 2;
-int SWIT=5;
-int m[]={22, 23, 24, 25};
+int trigger = 3, echo = 2;  //ultrasound
+int SWIT=5;  //gee
+int m[]={22, 23, 24, 25};  //motor
 //===========================
 int ra=0, rb=0, us=0;
 void redline1();
@@ -23,35 +23,52 @@ void backmotor();
 int main(int argc, char **argv)
 {
 	wiringPiSetup();
+	pinMode(SWIT, OUTPUT);
 	while(1)
 	{
+		redline1();
 		if(ra==1){
-			void motor();
-			void ultrasound();
+			//cout << "ra start" << endl;
+			motor();
+			//cout << "water start" << endl;
+			ultrasound();
+			cout << "us start" << endl;
 			if(us>7){
 				//water begin
+				cout << "gee start" << endl;
 				digitalWrite(SWIT,LOW);
+				cout << "water end" << endl;
 				while(1)
 				{
-					void ultrasound();
+					cout << "us2 start" << endl;
+					ultrasound();
+					cout << "us2 end" << endl;
 					if(us<=7){
 						//water stop
 						digitalWrite(SWIT,HIGH);
 						//motor goback
-						void backmotor();
+						backmotor();
 						break;
 					}
 				}
 			}
 			else{
 				//motor goback
-				void backmotor();
+				backmotor();
 			}
+		}
+		else{
+			continue;
 		}
 		while(1)
 		{
-			if(ra==0)
-			break;
+			cout << "ra2 start" << endl;
+			redline1();
+			cout << "ra2 end" << endl;
+			if(ra==0){
+				cout << "if start" << endl;
+				break;
+			}
 		}
 	}
 	return 0;
@@ -61,14 +78,16 @@ void ultrasound ()
 {
     Sonar sonar;
     sonar.init(trigger, echo);
-    //cout << "Distance is " << sonar.distance(30000) << " cm." << endl;
+    cout << "Distance is " << sonar.distance(30000) << " cm." << endl;
     delay(500);
     us=sonar.distance(30000);
+    cout << "us:" << us << endl;
 }
 
 void redline1()
 {
 	pinMode(redPin1, INPUT);
+	/*
 	while(1){
 		if(digitalRead(redPin1) == 0)
 			{
@@ -79,12 +98,19 @@ void redline1()
 				ra=0;
 			}
 	}
+	*/
+	for(int w1=0;w1<20;w1++){
+	digitalRead(redPin1);
+	ra=digitalRead(redPin1);
+	cout << "ra: " << ra << endl;
+	delay(100);
+	}
 }
 
 void redline2()
 {
 	pinMode(redPin2, INPUT);
-	while(1){
+	for(int w=0;w<50;w++){
 		if(digitalRead(redPin2) == 0)
 			{
 				rb=1;
@@ -113,6 +139,8 @@ void motor()
 			if(i==4)i=0;
 			delay(3);
 		}
+		redline2();
+		cout << rb << endl;
 		if(rb==1)
 		break;
 	}
@@ -135,6 +163,9 @@ void backmotor()
 			if(i==-1)i=3;
 			delay(3);
 		}
+		delay(100);
+		redline2();
+		cout << rb << endl;
 		if(rb==1)
 		break;
 	}
