@@ -5,8 +5,8 @@
 Sonar::Sonar(){}
 using namespace std;
 
-int trigger = 4;
-int echo = 5;
+int trigger = 3;
+int echo = 2;
 
 int main()
 {

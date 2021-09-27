@@ -2,7 +2,7 @@
 #include <wiringPi.h>
 
 using namespace std;
-int outPin = 0;
+int outPin = 1;
 
 int main(int argc, char **argv)
 {
